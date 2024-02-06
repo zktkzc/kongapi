@@ -20,28 +20,6 @@ import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
 
-/**
- *  Delete node
- * @zh-CN 删除节点
- *
- * @param record
- */
-const handleRemove = async (record: API.InterfaceInfo) => {
-  const hide = message.loading('正在删除');
-  if (!record) return true;
-  try {
-    await deleteInterfaceInfoUsingPost({
-      id: record.id,
-    });
-    hide();
-    message.success('删除成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败: ' + error.message);
-    return false;
-  }
-};
 const TableList: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
@@ -55,15 +33,17 @@ const TableList: React.FC = () => {
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
+  const [currentRow, setCurrentRow] = useState<API.InterfaceInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+
+  let currentRowId = useRef<number>(0);
 
   /**
    * @en-US Add node
    * @zh-CN 添加节点
    * @param fields
    */
-  const handleAdd = async (fields: API.InterfaceInfo) => {
+  const handleAdd = async (fields: API.InterfaceInfoAddRequest) => {
     const hide = message.loading('添加中');
     try {
       await addInterfaceInfoUsingPost({
@@ -72,11 +52,13 @@ const TableList: React.FC = () => {
       hide();
       message.success('添加成功');
       handleModalOpen(false);
+      actionRef.current?.reloadAndRest?.();
       return true;
     } catch (error) {
       hide();
       message.error('添加失败，请重试: ', error.message);
       handleModalOpen(false);
+      actionRef.current?.reloadAndRest?.();
       return false;
     }
   };
@@ -87,18 +69,46 @@ const TableList: React.FC = () => {
    *
    * @param fields
    */
-  const handleUpdate = async (fields: API.InterfaceInfo) => {
+  const handleUpdate = async (fields: API.InterfaceInfoUpdateRequest) => {
     const hide = message.loading('修改中');
     try {
       await updateInterfaceInfoUsingPost({
+        id: currentRowId.current,
         ...fields,
       });
       hide();
       message.success('修改成功');
+      actionRef.current?.reloadAndRest?.();
       return true;
     } catch (error) {
       hide();
       message.error('修改失败: ' + error.message);
+      actionRef.current?.reloadAndRest?.();
+      return false;
+    }
+  };
+
+  /**
+   *  Delete node
+   * @zh-CN 删除节点
+   *
+   * @param record
+   */
+  const handleRemove = async (record: API.InterfaceInfo) => {
+    const hide = message.loading('正在删除');
+    if (!record) return true;
+    try {
+      await deleteInterfaceInfoUsingPost({
+        id: record.id,
+      });
+      hide();
+      message.success('删除成功');
+      actionRef.current?.reloadAndRest?.();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败: ' + error.message);
+      actionRef.current?.reloadAndRest?.();
       return false;
     }
   };
@@ -177,7 +187,7 @@ const TableList: React.FC = () => {
           onClick={() => {
             handleUpdateModalOpen(true);
             setCurrentRow(record);
-            actionRef.current?.reload();
+            currentRowId.current = record.id;
           }}
         >
           修改
@@ -186,7 +196,6 @@ const TableList: React.FC = () => {
           key="delete"
           onClick={() => {
             handleRemove(record);
-            actionRef.current?.reload();
           }}
         >
           删除
