@@ -28,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/interfaceInfo")
 @Slf4j
+@CrossOrigin(origins = {"http://localhost:8000"}, allowCredentials = "true")
 public class InterfaceInfoController {
 
     @Resource
