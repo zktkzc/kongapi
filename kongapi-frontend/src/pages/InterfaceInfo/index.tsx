@@ -201,7 +201,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params, sorter, filter) => {
+        request={async (params) => {
           const res = await listInterfaceInfoByPageUsingGet({
             ...params,
           });
@@ -209,7 +209,13 @@ const TableList: React.FC = () => {
             return {
               data: res?.data.records || [],
               success: true,
-              total: res?.data.total,
+              total: res?.data.total || 0,
+            };
+          } else {
+            return {
+              data: [],
+              success: false,
+              total: 0,
             };
           }
         }}

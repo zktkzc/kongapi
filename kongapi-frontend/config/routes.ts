@@ -1,4 +1,4 @@
-export default [
+﻿export default [
   {
     path: '/user',
     layout: false,
@@ -11,11 +11,8 @@ export default [
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { path: '/admin', redirect: '/admin/sub-page' },
-      { path: '/admin/sub-page', name: '二级管理页', component: './Admin' },
+      { name: '接口管理', icon: 'table', path: '/admin/interface', component: './InterfaceInfo' },
     ],
   },
-  { name: '查询表格', icon: 'table', path: '/list', component: './TableList' },
-  { path: '/', redirect: '/welcome' },
   { path: '*', layout: false, component: './404' },
 ];
