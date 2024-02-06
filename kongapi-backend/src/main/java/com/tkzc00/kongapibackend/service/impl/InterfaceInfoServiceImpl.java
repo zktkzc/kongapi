@@ -32,7 +32,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
             if (StringUtils.isAnyBlank(url)) throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口地址不能为空");
             if (StringUtils.isAnyBlank(description)) throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口描述不能为空");
             if (StringUtils.isAnyBlank(method)) throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求类型不能为空");
-            if (userId == null || userId <= 0) throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户id不能为空或小于等于0");
         }
         if (StringUtils.isNotBlank(name) && name.length() > 100)
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口名称过长");
