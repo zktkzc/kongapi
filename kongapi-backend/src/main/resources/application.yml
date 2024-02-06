@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -7,10 +8,17 @@ spring:
   session:
     timeout: 86400
     store-type: redis
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   redis:
     host: localhost
     port: 6379
     database: 0
+  profiles:
+    active: dev
+  application:
+    name: kong-api
 server:
   port: 8080
   servlet:
@@ -21,6 +29,7 @@ server:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
   global-config:
     db-config:
       logic-delete-field: isDelete
