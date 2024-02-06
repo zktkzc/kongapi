@@ -66,6 +66,10 @@ public class User implements Serializable {
     @TableLogic
     private Integer isDelete;
 
+    private String accessKey;
+
+    private String secretKey;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

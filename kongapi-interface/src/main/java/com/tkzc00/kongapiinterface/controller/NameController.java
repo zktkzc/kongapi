@@ -3,6 +3,8 @@ package com.tkzc00.kongapiinterface.controller;
 import com.tkzc00.kongapiinterface.model.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 名称 API
  *
@@ -22,7 +24,11 @@ public class NameController {
     }
 
     @PostMapping("/user")
-    public String getUserNameByPost(@RequestBody User user) {
+    public String getUserNameByPost(@RequestBody User user, HttpServletRequest request) {
+        String accessKey = request.getHeader("accessKey");
+        String secretKey = request.getHeader("secretKey");
+        if (!accessKey.equals("tkzc00") || !secretKey.equals("abcdefgh"))
+            throw new RuntimeException("无权限");
         return "POST 你的用户名是：" + user.getUsername();
     }
 }
