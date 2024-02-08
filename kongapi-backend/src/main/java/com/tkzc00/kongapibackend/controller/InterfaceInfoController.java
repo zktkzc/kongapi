@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.tkzc00.kongapibackend.annotation.AuthCheck;
 import com.tkzc00.kongapibackend.common.*;
 import com.tkzc00.kongapibackend.constant.CommonConstant;
+import com.tkzc00.kongapibackend.constant.UserConstant;
 import com.tkzc00.kongapibackend.exception.BusinessException;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoAddRequest;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
@@ -152,7 +153,7 @@ public class InterfaceInfoController {
      * @param interfaceInfoQueryRequest
      * @return
      */
-    @AuthCheck(mustRole = "admin")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     @GetMapping("/list")
     public BaseResponse<List<InterfaceInfo>> listInterfaceInfo(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
         InterfaceInfo interfaceInfoQuery = new InterfaceInfo();
@@ -204,7 +205,7 @@ public class InterfaceInfoController {
      * @return
      */
     @PostMapping("/online")
-    @AuthCheck(mustRole = "admin")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest,
                                                      HttpServletRequest request) {
         if (idRequest == null || idRequest.getId() <= 0) {
@@ -241,7 +242,7 @@ public class InterfaceInfoController {
      * @return
      */
     @PostMapping("/offline")
-    @AuthCheck(mustRole = "admin")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest,
                                                       HttpServletRequest request) {
         if (idRequest == null || idRequest.getId() <= 0) {

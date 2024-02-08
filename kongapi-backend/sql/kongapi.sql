@@ -1,4 +1,3 @@
--- auto-generated definition
 create table interface_info
 (
     id             bigint auto_increment comment '主键'
@@ -13,7 +12,8 @@ create table interface_info
     userId         bigint                             not null comment '用户id',
     isDelete       tinyint  default 0                 not null comment '是否删除，0-未删除，1-已删除',
     createTime     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
+    updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    requestParams  text                               null comment '请求参数'
 )
     comment '接口信息表';
 
@@ -39,7 +39,6 @@ insert into kongapi.`interface_info` (`name`, `description`, `url`, `requestHead
 insert into kongapi.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`, `method`, `userId`) values ('吕峻熙', '沈鹏飞', 'www.shari-reichel.org', '郭鸿煊', '覃烨霖', 0, '熊黎昕', 493);
 
 
--- auto-generated definition
 create table user
 (
     id           bigint auto_increment comment 'id'
@@ -59,3 +58,18 @@ create table user
         unique (userAccount)
 )
     comment '用户';
+
+create table user_interface_info
+(
+    id              bigint auto_increment comment '主键'
+        primary key,
+    userId          bigint                             not null comment '用户id',
+    interfaceInfoId bigint                             not null comment '接口id',
+    totalNum        int      default 0                 not null comment '总调用次数',
+    leftNum         int      default 0                 not null comment '剩余调用次数',
+    status          tinyint  default 0                 not null comment '状态，0-正常，1-禁用',
+    isDelete        tinyint  default 0                 not null comment '是否删除，0-未删除，1-已删除',
+    createTime      datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
+)
+    comment '用户接口关系表';
