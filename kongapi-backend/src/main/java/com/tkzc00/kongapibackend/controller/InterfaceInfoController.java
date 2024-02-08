@@ -3,10 +3,7 @@ package com.tkzc00.kongapibackend.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tkzc00.kongapibackend.annotation.AuthCheck;
-import com.tkzc00.kongapibackend.common.BaseResponse;
-import com.tkzc00.kongapibackend.common.DeleteRequest;
-import com.tkzc00.kongapibackend.common.ErrorCode;
-import com.tkzc00.kongapibackend.common.ResultUtils;
+import com.tkzc00.kongapibackend.common.*;
 import com.tkzc00.kongapibackend.constant.CommonConstant;
 import com.tkzc00.kongapibackend.exception.BusinessException;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoAddRequest;
@@ -14,8 +11,10 @@ import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoQueryReque
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.tkzc00.kongapibackend.model.entity.InterfaceInfo;
 import com.tkzc00.kongapibackend.model.entity.User;
+import com.tkzc00.kongapibackend.model.enums.InterfaceInfoStatus;
 import com.tkzc00.kongapibackend.service.InterfaceInfoService;
 import com.tkzc00.kongapibackend.service.UserService;
+import com.tkzc00.kongapiclientsdk.client.KongApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +24,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * 接口管理
+ *
+ * @author tkzc00
+ */
 @RestController
 @RequestMapping("/interfaceInfo")
 @Slf4j
@@ -36,6 +40,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private KongApiClient kongApiClient;
 
     /**
      * 创建
@@ -186,5 +193,72 @@ public class InterfaceInfoController {
                 sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
         Page<InterfaceInfo> interfaceInfoPage = interfaceInfoService.page(new Page<>(current, size), queryWrapper);
         return ResultUtils.success(interfaceInfoPage);
+    }
+
+    /**
+     * 发布接口
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(idRequest, interfaceInfo);
+        // 参数校验
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
+        long id = idRequest.getId();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 判断该接口是否可以调用
+        com.tkzc00.kongapiclientsdk.model.User user = new com.tkzc00.kongapiclientsdk.model.User();
+        user.setUsername("tkzc00");
+        String username = kongApiClient.getUserNameByPost(user);
+        if (StringUtils.isBlank(username)) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口调用失败");
+        }
+        // 修改数据库状态
+        interfaceInfo.setStatus(InterfaceInfoStatus.ONLINE.getCode());
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 下线接口
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                      HttpServletRequest request) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(idRequest, interfaceInfo);
+        // 参数校验
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
+        User user = userService.getLoginUser(request);
+        long id = idRequest.getId();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 修改数据库状态
+        interfaceInfo.setStatus(InterfaceInfoStatus.OFFLINE.getCode());
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
     }
 }
