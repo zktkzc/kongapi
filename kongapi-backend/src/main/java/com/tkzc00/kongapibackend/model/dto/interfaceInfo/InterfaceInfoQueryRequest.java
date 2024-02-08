@@ -43,4 +43,9 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
     private String method;
 
     private Integer status;
+
+    /**
+     * 请求参数
+     */
+    private String requestParams;
 }

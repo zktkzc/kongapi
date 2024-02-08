@@ -42,4 +42,9 @@ public class InterfaceInfoUpdateRequest implements Serializable {
     private String method;
 
     private Integer status;
+
+    /**
+     * 请求参数
+     */
+    private String requestParams;
 }
