@@ -13,7 +13,7 @@ const Index: React.FC = () => {
     setLoading(true);
     try {
       const res = await getInterfaceInfoByIdUsingGet({
-        id: params.id,
+        id: Number(params.id),
       });
       setData(res.data);
     } catch (e: any) {
@@ -28,7 +28,7 @@ const Index: React.FC = () => {
 
   return (
     <PageContainer title="接口详情">
-      <Card>
+      <Card loading={loading}>
         {data ? (
           <Descriptions title={data.name} column={1}>
             <Descriptions.Item label="ID">{data.id}</Descriptions.Item>
@@ -37,6 +37,7 @@ const Index: React.FC = () => {
             <Descriptions.Item label="接口地址">{data.url}</Descriptions.Item>
             <Descriptions.Item label="请求方法">{data.method}</Descriptions.Item>
             <Descriptions.Item label="请求头">{data.requestHeader}</Descriptions.Item>
+            <Descriptions.Item label="请求参数">{data.requestParams}</Descriptions.Item>
             <Descriptions.Item label="响应头">{data.responseHeader}</Descriptions.Item>
             <Descriptions.Item label="创建时间">{data.createTime}</Descriptions.Item>
             <Descriptions.Item label="更新时间">{data.updateTime}</Descriptions.Item>
