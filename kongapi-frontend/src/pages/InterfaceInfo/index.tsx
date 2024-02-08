@@ -58,7 +58,7 @@ const Index: React.FC = () => {
     <PageContainer title="接口详情">
       <Card loading={loading}>
         {data ? (
-            <Descriptions title={data.name} column={1} extra={<Button type="primary">在线调用</Button>}>
+            <Descriptions title={data.name} column={1}>
             <Descriptions.Item label="ID">{data.id}</Descriptions.Item>
             <Descriptions.Item label="接口状态">{data.status === 1 ? '正常' : '下线'}</Descriptions.Item>
             <Descriptions.Item label="接口描述">{data.description}</Descriptions.Item>
@@ -87,6 +87,7 @@ const Index: React.FC = () => {
           </Form.Item>
         </Form>
       </Card>
+      <Divider/>
       <Card title="响应结果" loading={invokeLoading}>
         <pre>{JSON.stringify(invokeRes, null, 2)}</pre>
       </Card>
