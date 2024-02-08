@@ -35,9 +35,9 @@ const Index: React.FC = () => {
         itemLayout="horizontal"
         dataSource={list}
         renderItem={(item) => (
-          <List.Item actions={[<a key="list-loadmore-edit">查看</a>]}>
+          <List.Item actions={[<a href={`/interface_info/${item.id}`} key={item.id}>查看</a>]}>
             <List.Item.Meta
-              title={<a href="https://ant.design">{item.name}</a>}
+              title={<a href={`/interface_info/${item.id}`}>{item.name}</a>}
               description={item.description}
             />
           </List.Item>
