@@ -2,11 +2,13 @@ package com.tkzc00.kongapibackend.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.Gson;
 import com.tkzc00.kongapibackend.annotation.AuthCheck;
 import com.tkzc00.kongapibackend.common.*;
 import com.tkzc00.kongapibackend.constant.CommonConstant;
 import com.tkzc00.kongapibackend.exception.BusinessException;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoAddRequest;
+import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.tkzc00.kongapibackend.model.entity.InterfaceInfo;
@@ -259,6 +261,43 @@ public class InterfaceInfoController {
         // 修改数据库状态
         interfaceInfo.setStatus(InterfaceInfoStatus.OFFLINE.getCode());
         boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 调用接口
+     *
+     * @param interfaceInfoInvokeRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest,
+                                                     HttpServletRequest request) {
+        if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(interfaceInfoInvokeRequest, interfaceInfo);
+        // 参数校验
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
+        User loginUser = userService.getLoginUser(request);
+        long id = interfaceInfoInvokeRequest.getId();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (oldInterfaceInfo.getStatus() == InterfaceInfoStatus.OFFLINE.getCode()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口已下线");
+        }
+        // 调用接口
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        KongApiClient tempClient = new KongApiClient(accessKey, secretKey);
+        Gson gson = new Gson();
+        com.tkzc00.kongapiclientsdk.model.User user = gson.fromJson(interfaceInfoInvokeRequest.getUserRequestParams(), com.tkzc00.kongapiclientsdk.model.User.class);
+        String result = tempClient.getUserNameByPost(user);
         return ResultUtils.success(result);
     }
 }

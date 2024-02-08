@@ -1,15 +1,24 @@
-import { getInterfaceInfoByIdUsingGet } from '@/services/kongapi-backend/interfaceInfoController';
+import {
+  getInterfaceInfoByIdUsingGet,
+  invokeInterfaceInfoUsingPost
+} from '@/services/kongapi-backend/interfaceInfoController';
 import { PageContainer } from '@ant-design/pro-components';
-import {Card, Descriptions, message} from 'antd';
+import {Button, Card, Descriptions, Divider, Form, message} from 'antd';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
+import TextArea from "antd/es/input/TextArea";
 
 const Index: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
+  const [invokeLoading, setInvokeLoading] = React.useState(false);
   const [data, setData] = React.useState<API.InterfaceInfo>();
+  const [invokeRes, setInvokeRes] = React.useState<any>();
   const params = useParams();
   const loadData = async () => {
-    if (!params.id) message.error('缺少参数');
+    if (!params.id) {
+      message.error('缺少参数');
+      return;
+    }
     setLoading(true);
     try {
       const res = await getInterfaceInfoByIdUsingGet({
@@ -26,11 +35,30 @@ const Index: React.FC = () => {
     loadData();
   }, []);
 
+  const onFinish = async (values: any) => {
+    if (!params.id) {
+      message.error('缺少参数');
+      return;
+    }
+    setInvokeLoading(true);
+    try {
+      const res = await invokeInterfaceInfoUsingPost({
+        id: Number(params.id),
+        ...values
+      });
+      setInvokeRes(res.data);
+      message.success('请求成功');
+    } catch (e: any) {
+      message.error('请求失败: ' + e.message);
+    }
+    setInvokeLoading(false);
+  };
+
   return (
     <PageContainer title="接口详情">
       <Card loading={loading}>
         {data ? (
-          <Descriptions title={data.name} column={1}>
+            <Descriptions title={data.name} column={1} extra={<Button type="primary">在线调用</Button>}>
             <Descriptions.Item label="ID">{data.id}</Descriptions.Item>
             <Descriptions.Item label="接口状态">{data.status === 1 ? '正常' : '下线'}</Descriptions.Item>
             <Descriptions.Item label="接口描述">{data.description}</Descriptions.Item>
@@ -45,6 +73,22 @@ const Index: React.FC = () => {
         ) : (
           <>接口不存在</>
         )}
+      </Card>
+      <Divider/>
+      <Card title="在线调用">
+        <Form name="invoke" onFinish={onFinish} layout='vertical'>
+          <Form.Item label="请求参数" name="userRequestParams">
+            <TextArea />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              发送请求
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+      <Card title="响应结果" loading={invokeLoading}>
+        <pre>{JSON.stringify(invokeRes, null, 2)}</pre>
       </Card>
     </PageContainer>
   );
