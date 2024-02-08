@@ -1,8 +1,7 @@
-import CreateModal from '@/pages/InterfaceInfo/components/CreateModal';
 import {
   addInterfaceInfoUsingPost,
   deleteInterfaceInfoUsingPost,
-  listInterfaceInfoByPageUsingGet,
+  listInterfaceInfoByPageUsingGet, offlineInterfaceInfoUsingPost, onlineInterfaceInfoUsingPost,
   updateInterfaceInfoUsingPost,
 } from '@/services/kongapi-backend/interfaceInfoController';
 import {PlusOutlined} from '@ant-design/icons';
@@ -19,6 +18,7 @@ import '@umijs/max';
 import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateModal from './components/UpdateModal';
+import CreateModal from './components/CreateModal';
 
 const TableList: React.FC = () => {
   /**
@@ -113,6 +113,56 @@ const TableList: React.FC = () => {
     }
   };
 
+  /**
+   *  Delete node
+   * @zh-CN 发布接口
+   *
+   * @param record
+   */
+  const handleOnline = async (record: API.IdRequest) => {
+    const hide = message.loading('发布中');
+    if (!record) return true;
+    try {
+      await onlineInterfaceInfoUsingPost({
+        id: record.id,
+      });
+      hide();
+      message.success('发布成功');
+      actionRef.current?.reloadAndRest?.();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('发布失败: ' + error.message);
+      actionRef.current?.reloadAndRest?.();
+      return false;
+    }
+  };
+
+  /**
+   *  Delete node
+   * @zh-CN 下线接口
+   *
+   * @param record
+   */
+  const handleOffline = async (record: API.IdRequest) => {
+    const hide = message.loading('下线中');
+    if (!record) return true;
+    try {
+      await offlineInterfaceInfoUsingPost({
+        id: record.id,
+      });
+      hide();
+      message.success('下线成功');
+      actionRef.current?.reloadAndRest?.();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('下线失败: ' + error.message);
+      actionRef.current?.reloadAndRest?.();
+      return false;
+    }
+  };
+
   const columns: ProColumns<API.InterfaceInfo>[] = [
     {
       dataIndex: 'id',
@@ -192,14 +242,34 @@ const TableList: React.FC = () => {
         >
           修改
         </a>,
-        <a
+        <Button
           key="delete"
+          type="text"
+          danger
           onClick={() => {
             handleRemove(record);
           }}
         >
           删除
-        </a>,
+        </Button>,
+        record.status === 0 ?<a
+          key="online"
+          onClick={() => {
+            handleOnline(record);
+          }}
+        >
+          发布
+        </a> : null,
+        record.status === 1 ?<Button
+          key="offline"
+          type="text"
+          danger
+          onClick={() => {
+            handleOffline(record);
+          }}
+        >
+          下线
+        </Button> : null,
       ],
     },
   ];
