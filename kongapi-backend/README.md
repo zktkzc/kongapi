@@ -14,6 +14,8 @@
 - Lombok
 - Gson
 - Hutool
+- Spring AOP
+- Spring Cloud Gateway
 
 ## 项目功能概述
 
@@ -27,3 +29,4 @@
 - 使用 Hutool 来调用接口
 - 根据 AccessKey 和 SecretKey 来进行接口调用的校验
 - 统计接口调用次数
+- 使用 Spring Cloud Gateway 网关来统一进行接口调用次数的统计

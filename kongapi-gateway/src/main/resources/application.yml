@@ -1,0 +1,19 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: kongapi-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: kongapi
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/**
+          filters:
+            - StripPrefix=1
+logging:
+  level:
+    org:
+      springframework:
+        gateway: trace
