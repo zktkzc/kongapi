@@ -1,19 +1,24 @@
 server:
   port: 8090
 spring:
-  application:
-    name: kongapi-gateway
   cloud:
     gateway:
       routes:
-        - id: kongapi
+        - id: api_route
           uri: http://localhost:8081
           predicates:
             - Path=/api/**
-          filters:
-            - StripPrefix=1
 logging:
   level:
     org:
       springframework:
         gateway: trace
+dubbo:
+  application:
+    name: kongapi-gateway
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848

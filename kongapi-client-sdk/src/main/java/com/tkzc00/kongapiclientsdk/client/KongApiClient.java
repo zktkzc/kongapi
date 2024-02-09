@@ -18,6 +18,7 @@ import java.util.Map;
 public class KongApiClient {
     private String accessKey;
     private String secretKey;
+    private static final String GATEWAY_HOST = "http://localhost:8090";
 
     public KongApiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
@@ -27,18 +28,18 @@ public class KongApiClient {
     public String getNameByGet(String name) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
-        return HttpUtil.get("http://localhost:8081/api/name", paramMap);
+        return HttpUtil.get(GATEWAY_HOST + "/api/name", paramMap);
     }
 
     public String getNameByPost(String name) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
-        return HttpUtil.post("http://localhost:8081/api/name", paramMap);
+        return HttpUtil.post(GATEWAY_HOST + "/api/name", paramMap);
     }
 
     public String getUserNameByPost(User user) {
         String json = JSONUtil.toJsonStr(user);
-        return HttpRequest.post("http://localhost:8081/api/name/user")
+        return HttpRequest.post(GATEWAY_HOST + "/api/name/user")
                 .addHeaders(getHeadersMap(json))
                 .body(json).execute().body();
     }

@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,8 +16,6 @@ spring:
     database: 0
   profiles:
     active: dev
-  application:
-    name: kong-api
 server:
   port: 8080
   servlet:
@@ -39,3 +36,12 @@ kong:
   client:
     seccess-key: tkzc00
     secret-key: abcdefgh
+dubbo:
+  application:
+    name: kongapi-backend
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848
