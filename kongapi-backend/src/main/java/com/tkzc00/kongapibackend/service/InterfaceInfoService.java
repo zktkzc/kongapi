@@ -1,7 +1,7 @@
 package com.tkzc00.kongapibackend.service;
 
-import com.tkzc00.kongapibackend.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tkzc00.kongapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author tkzc00

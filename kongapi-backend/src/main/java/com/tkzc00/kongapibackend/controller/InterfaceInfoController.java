@@ -12,12 +12,12 @@ import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoAddRequest
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.tkzc00.kongapibackend.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
-import com.tkzc00.kongapibackend.model.entity.InterfaceInfo;
-import com.tkzc00.kongapibackend.model.entity.User;
 import com.tkzc00.kongapibackend.model.enums.InterfaceInfoStatus;
 import com.tkzc00.kongapibackend.service.InterfaceInfoService;
 import com.tkzc00.kongapibackend.service.UserService;
 import com.tkzc00.kongapiclientsdk.client.KongApiClient;
+import com.tkzc00.kongapicommon.model.entity.InterfaceInfo;
+import com.tkzc00.kongapicommon.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -222,8 +222,8 @@ public class InterfaceInfoController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         // 判断该接口是否可以调用
-        com.tkzc00.kongapiclientsdk.model.User user = new com.tkzc00.kongapiclientsdk.model.User();
-        user.setUsername("tkzc00");
+        User user = new User();
+        user.setUserName("tkzc00");
         String username = kongApiClient.getUserNameByPost(user);
         if (StringUtils.isBlank(username)) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口调用失败");
@@ -297,7 +297,7 @@ public class InterfaceInfoController {
         String secretKey = loginUser.getSecretKey();
         KongApiClient tempClient = new KongApiClient(accessKey, secretKey);
         Gson gson = new Gson();
-        com.tkzc00.kongapiclientsdk.model.User user = gson.fromJson(interfaceInfoInvokeRequest.getUserRequestParams(), com.tkzc00.kongapiclientsdk.model.User.class);
+        User user = gson.fromJson(interfaceInfoInvokeRequest.getUserRequestParams(), User.class);
         String result = tempClient.getUserNameByPost(user);
         return ResultUtils.success(result);
     }

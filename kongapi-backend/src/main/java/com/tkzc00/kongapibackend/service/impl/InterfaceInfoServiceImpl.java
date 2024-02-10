@@ -1,13 +1,12 @@
 package com.tkzc00.kongapibackend.service.impl;
 
-import java.util.Date;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tkzc00.kongapibackend.common.ErrorCode;
 import com.tkzc00.kongapibackend.exception.BusinessException;
-import com.tkzc00.kongapibackend.model.entity.InterfaceInfo;
 import com.tkzc00.kongapibackend.service.InterfaceInfoService;
 import com.tkzc00.kongapibackend.mapper.InterfaceInfoMapper;
+import com.tkzc00.kongapicommon.model.entity.InterfaceInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

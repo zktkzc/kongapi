@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tkzc00.kongapibackend.common.ErrorCode;
 import com.tkzc00.kongapibackend.exception.BusinessException;
 import com.tkzc00.kongapibackend.mapper.UserInterfaceInfoMapper;
+import com.tkzc00.kongapibackend.service.UserInterfaceInfoService;
 import com.tkzc00.kongapicommon.model.entity.UserInterfaceInfo;
-import com.tkzc00.kongapicommon.service.UserInterfaceInfoService;
 import org.springframework.stereotype.Service;
 
 /**

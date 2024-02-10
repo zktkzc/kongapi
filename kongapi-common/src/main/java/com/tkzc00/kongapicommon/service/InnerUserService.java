@@ -1,7 +1,6 @@
 package com.tkzc00.kongapicommon.service;
 
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.tkzc00.kongapicommon.model.entity.User;
 
 /**
@@ -9,6 +8,6 @@ import com.tkzc00.kongapicommon.model.entity.User;
  *
  * @author yupi
  */
-public interface InnerUserService extends IService<User> {
-    User getInvokeUser(String accessKey, String secretKey);
+public interface InnerUserService {
+    User getInvokeUser(String accessKey);
 }

@@ -1,4 +1,4 @@
-package com.tkzc00.kongapicommon.service;
+package com.tkzc00.kongapibackend.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;

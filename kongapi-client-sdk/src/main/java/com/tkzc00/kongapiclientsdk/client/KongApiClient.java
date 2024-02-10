@@ -4,8 +4,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.tkzc00.kongapiclientsdk.model.User;
 import com.tkzc00.kongapiclientsdk.utils.SignUtils;
+import com.tkzc00.kongapicommon.model.entity.User;
 
 import java.util.HashMap;
 import java.util.Map;

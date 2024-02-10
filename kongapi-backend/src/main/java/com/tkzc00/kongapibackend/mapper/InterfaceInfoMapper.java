@@ -1,7 +1,7 @@
 package com.tkzc00.kongapibackend.mapper;
 
-import com.tkzc00.kongapibackend.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tkzc00.kongapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author tkzc00

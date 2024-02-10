@@ -2,7 +2,7 @@ package com.tkzc00.kongapibackend.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tkzc00.kongapibackend.model.entity.User;
+import com.tkzc00.kongapicommon.model.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -12,7 +12,6 @@ public class SignUtils {
     /**
      * 生成签名
      *
-     * @param headersMap 请求头
      * @param secretKey  秘钥
      * @return 签名
      */
