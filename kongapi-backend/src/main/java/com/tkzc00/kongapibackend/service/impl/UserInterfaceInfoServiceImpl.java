@@ -1,5 +1,6 @@
 package com.tkzc00.kongapibackend.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tkzc00.kongapibackend.common.ErrorCode;
@@ -45,6 +46,16 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口id不合法");
         if (userId == null || userId <= 0)
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户id不合法");
+        long count = count(new QueryWrapper<UserInterfaceInfo>().eq("interfaceInfoId", interfaceInfoId)
+                .eq("userId", userId));
+        if (count <= 0) {
+            UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
+            userInterfaceInfo.setUserId(userId);
+            userInterfaceInfo.setInterfaceInfoId(interfaceInfoId);
+            userInterfaceInfo.setTotalNum(1);
+            userInterfaceInfo.setLeftNum(9);
+            return save(userInterfaceInfo);
+        }
         return update(new UpdateWrapper<UserInterfaceInfo>().eq("interfaceInfoId", interfaceInfoId)
                 .eq("userId", userId).ge("leftNum", 1)
                 .setSql("leftNum = leftNum - 1, totalNum = totalNum + 1"));
