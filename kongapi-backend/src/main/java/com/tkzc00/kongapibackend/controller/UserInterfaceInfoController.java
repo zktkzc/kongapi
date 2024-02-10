@@ -14,9 +14,9 @@ import com.tkzc00.kongapibackend.model.dto.userInterfaceInfo.UserInterfaceInfoAd
 import com.tkzc00.kongapibackend.model.dto.userInterfaceInfo.UserInterfaceInfoQueryRequest;
 import com.tkzc00.kongapibackend.model.dto.userInterfaceInfo.UserInterfaceInfoUpdateRequest;
 import com.tkzc00.kongapibackend.model.entity.User;
-import com.tkzc00.kongapibackend.model.entity.UserInterfaceInfo;
-import com.tkzc00.kongapibackend.service.UserInterfaceInfoService;
 import com.tkzc00.kongapibackend.service.UserService;
+import com.tkzc00.kongapicommon.model.entity.UserInterfaceInfo;
+import com.tkzc00.kongapicommon.service.UserInterfaceInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;

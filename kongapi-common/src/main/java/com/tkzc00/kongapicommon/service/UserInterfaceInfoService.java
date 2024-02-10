@@ -1,7 +1,8 @@
-package com.tkzc00.kongapibackend.service;
+package com.tkzc00.kongapicommon.service;
 
-import com.tkzc00.kongapibackend.model.entity.UserInterfaceInfo;
+
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tkzc00.kongapicommon.model.entity.UserInterfaceInfo;
 
 /**
 * @author tkzc00

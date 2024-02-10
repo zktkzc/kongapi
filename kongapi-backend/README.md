@@ -16,6 +16,8 @@
 - Hutool
 - Spring AOP
 - Spring Cloud Gateway
+- Dubbo
+- Nacos
 
 ## 项目功能概述
 
@@ -36,3 +38,4 @@
 - 使用网关进行请求转发
 - 使用网关进行全局请求、响应拦截
 - 使用网关进行统一日志记录
+- 使用 Dubbo 和 Nacos 来实现服务注册、发现、调用

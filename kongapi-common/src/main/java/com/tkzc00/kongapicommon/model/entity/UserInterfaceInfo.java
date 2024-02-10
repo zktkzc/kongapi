@@ -1,11 +1,10 @@
-package com.tkzc00.kongapibackend.model.entity;
+package com.tkzc00.kongapicommon.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.Data;
 
 /**
  * 用户接口关系表
